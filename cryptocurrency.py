@@ -1,8 +1,11 @@
-class Cryptocurrency: #Definition of a cryptocurrency
+class Cryptocurrency:
 	
-	""" Include the name of the cryptocurrency, and two
-		prices at different time in order to compare the percentage
-		between them"""
+	"""
+	class represents a cryptocurrency,
+	including his name and two different values
+	of it at different times
+
+	"""
 
 	def __init__(self,name, old_price, __new_price) :
 		self.__name = name

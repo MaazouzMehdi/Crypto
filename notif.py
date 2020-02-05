@@ -1,20 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# notify2 is an API
 import notify2
 
-
-""" 
-notify2 is a replacement for pynotify which can be used from different GUI toolkits 
-and from programs without a GUI. 
-The API is largely the same as that of pynotify, but some less important parts are left out.
-"""
 def init() :
+	"""
+	initialize a notification
+	"""
 	notify2.init('app name')
 	
 
 def show(crypto, value, percent) :
-	
+	"""
+	show an notification at the user's screen,
+	this notification includes the name of the crypto, it's value
+	and the percent of increasing or decreasing
+	"""
 	#Initialise the D-Bus connection. Must be called before you send any notifications
 	notify2.init('app name')
 	

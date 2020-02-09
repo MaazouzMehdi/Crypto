@@ -21,9 +21,13 @@ def get_change_conversion() :
 	send a request in order to get the current exchange rate
 	between the USD/EUR
 	"""
-	r = requests.get("https://www.google.com/search?client=ubuntu&channel=fs&q=conversion+dollar+euro&ie=utf-8&oe=utf-8")
-	i = r.text.find("EUR/USD Amerikaanse Dollar")
-	return(float(r.text[i+28:i+33].replace(',','.')))
+	while True :
+		try :
+			r = requests.get("https://www.google.com/search?client=ubuntu&channel=fs&q=conversion+dollar+euro&ie=utf-8&oe=utf-8")
+			i = r.text.find("EUR/USD Amerikaanse Dollar")
+			return(float(r.text[i+28:i+33].replace(',','.')))
+		except ValueError :
+			time.sleep(60)
 
 def fetch_price(start,end,response) :
 	"""
@@ -47,7 +51,8 @@ def percentage(old_price, new_price) :
 	between two values
 	"""
 	return ((new_price / old_price) * 100. - 100)
-	
+
+
 def run(cryptos) :
 	"""
 	main method that call the others in order to show
@@ -56,8 +61,18 @@ def run(cryptos) :
 	increasing or decreasing.
 	"""
 	for crypto in cryptos :
-		response = contact_serveur(crypto.get_name())
-		price_usd = fetch_price("\"price\"","priceCurrency",response)
+		request_ok = False
+		"""
+		Sometimes fetch_price raise an ValueError because he matches
+		more than the price of the cryptocurrency
+		"""
+		while not (request_ok) :
+			try:
+				response = contact_serveur(crypto.get_name())
+				price_usd = fetch_price("\"price\"","priceCurrency",response)
+				request_ok = True
+			except ValueError:
+				time.sleep(60)
 		crypto.set_new_price(convert(price_usd))
 		if crypto.get_old_price() == 0 :
 			percent = 0.
